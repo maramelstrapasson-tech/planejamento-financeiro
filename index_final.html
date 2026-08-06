@@ -8,6 +8,7 @@
   <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="icon" type="image/png" href="https://media.base44.com/images/public/6a14550df1aada43995f94be/087c84645_generated_image.png">
@@ -1235,7 +1236,8 @@ function useDB(token) {
     renovarRecorrencia,
     fecharFatura,
     autosomaCartao,
-    confirmarPagamentoFatura
+    confirmarPagamentoFatura,
+    api
   };
 }
 
@@ -4017,14 +4019,23 @@ function Metas({
   const [modal, setModal] = useState(false);
   const [editando, setEditando] = useState(null);
   async function carregarMetas() {
+    if (!navigator.onLine) {
+      const cached = JSON.parse(localStorage.getItem('cfd_metas_cache') || '[]');
+      setMetas(cached);
+      setLoading(false);
+      return;
+    }
     try {
-      const res = await api({
+      const res = await db.api({
         entity: 'Meta',
         action: 'list'
       });
-      const sorted = (res || []).sort((a, b) => { const order = { curto: 0, medio: 1, longo: 2 }; const pa = order[a.prazo] ?? 3, pb = order[b.prazo] ?? 3; if (pa !== pb) return pa - pb; if (a.data_objetivo && b.data_objetivo) return a.data_objetivo.localeCompare(b.data_objetivo); if (a.data_objetivo) return -1; if (b.data_objetivo) return 1; return (a.nome || '').localeCompare(b.nome || ''); }); setMetas(sorted);
+      const sorted = (res || []).sort((a, b) => { const order = { curto: 0, medio: 1, longo: 2 }; const pa = order[a.prazo] ?? 3, pb = order[b.prazo] ?? 3; if (pa !== pb) return pa - pb; if (a.data_objetivo && b.data_objetivo) return a.data_objetivo.localeCompare(b.data_objetivo); if (a.data_objetivo) return -1; if (b.data_objetivo) return 1; return (a.nome || '').localeCompare(b.nome || ''); });
+      setMetas(sorted);
+      localStorage.setItem('cfd_metas_cache', JSON.stringify(sorted));
     } catch (e) {
-      setMetas([]);
+      const cached = JSON.parse(localStorage.getItem('cfd_metas_cache') || '[]');
+      setMetas(cached);
     }
     setLoading(false);
   }
@@ -4032,15 +4043,30 @@ function Metas({
     carregarMetas();
   }, []);
   async function salvarMeta(data) {
+    if (!navigator.onLine) {
+      const cached = JSON.parse(localStorage.getItem('cfd_metas_cache') || '[]');
+      if (editando) {
+        const updated = cached.map(m => m.id === editando.id ? { ...m, ...data } : m);
+        localStorage.setItem('cfd_metas_cache', JSON.stringify(updated));
+      } else {
+        const novo = { ...data, id: 'offline_' + Date.now() };
+        cached.push(novo);
+        localStorage.setItem('cfd_metas_cache', JSON.stringify(cached));
+      }
+      setModal(false);
+      setEditando(null);
+      await carregarMetas();
+      return;
+    }
     if (editando) {
-      await api({
+      await db.api({
         entity: 'Meta',
         action: 'update',
         id: editando.id,
         data
       });
     } else {
-      await api({
+      await db.api({
         entity: 'Meta',
         action: 'create',
         data
@@ -4052,7 +4078,14 @@ function Metas({
   }
   async function deletarMeta(id) {
     if (!confirm('Excluir esta meta?')) return;
-    await api({
+    if (!navigator.onLine) {
+      const cached = JSON.parse(localStorage.getItem('cfd_metas_cache') || '[]');
+      const updated = cached.filter(m => m.id !== id);
+      localStorage.setItem('cfd_metas_cache', JSON.stringify(updated));
+      await carregarMetas();
+      return;
+    }
+    await db.api({
       entity: 'Meta',
       action: 'delete',
       id
@@ -4064,7 +4097,14 @@ function Metas({
       ...meta,
       valor_atual: valor
     };
-    await api({
+    if (!navigator.onLine) {
+      const cached = JSON.parse(localStorage.getItem('cfd_metas_cache') || '[]');
+      const updated = cached.map(m => m.id === meta.id ? { ...m, valor_atual: valor } : m);
+      localStorage.setItem('cfd_metas_cache', JSON.stringify(updated));
+      await carregarMetas();
+      return;
+    }
+    await db.api({
       entity: 'Meta',
       action: 'update',
       id: meta.id,
