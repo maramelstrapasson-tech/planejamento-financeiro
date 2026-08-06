@@ -4022,7 +4022,7 @@ function Metas({
         entity: 'Meta',
         action: 'list'
       });
-      setMetas(res || []);
+      const sorted = (res || []).sort((a, b) => { const order = { curto: 0, medio: 1, longo: 2 }; const pa = order[a.prazo] ?? 3, pb = order[b.prazo] ?? 3; if (pa !== pb) return pa - pb; if (a.data_objetivo && b.data_objetivo) return a.data_objetivo.localeCompare(b.data_objetivo); if (a.data_objetivo) return -1; if (b.data_objetivo) return 1; return (a.nome || '').localeCompare(b.nome || ''); }); setMetas(sorted);
     } catch (e) {
       setMetas([]);
     }
@@ -4125,7 +4125,7 @@ function Metas({
     },
     className: "mt-4 bg-blue-600 text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-blue-700"
   }, "Criar primeira meta")) : ['curto', 'medio', 'longo'].map(prazo => {
-    const metasPrazo = metas.filter(m => m.prazo === prazo);
+    const metasPrazo = metas.filter(m => m.prazo === prazo).sort((a, b) => { if (a.data_objetivo && b.data_objetivo) return a.data_objetivo.localeCompare(b.data_objetivo); if (a.data_objetivo) return -1; if (b.data_objetivo) return 1; return (a.nome || '').localeCompare(b.nome || ''); });
     if (metasPrazo.length === 0) return null;
     const cor = cores[prazo];
     return /*#__PURE__*/React.createElement("div", {
@@ -4236,18 +4236,21 @@ function FormMeta({
   const [saving, setSaving] = useState(false);
   const icones = ['🎯', '🏖️', '🚗', '🏠', '💰', '✈️', '💻', '📱', '💍', '🎓', '👶', '🐕', '🎸', '🏆', '💎', '🛡️'];
   function h(e) {
+    const val = ['valor_objetivo', 'valor_atual'].includes(e.target.name) ? parseFloat(e.target.value) || 0 : e.target.value;
     setForm({
       ...form,
-      [e.target.name]: e.target.value
+      [e.target.name]: val
     });
   }
   async function s(e) {
     e.preventDefault();
     setSaving(true);
     try {
-      onSave(form);
+      await onSave(form);
     } catch (err) {
       alert(err.message);
+      setSaving(false);
+      return;
     }
     setSaving(false);
   }
