@@ -1,22 +1,9 @@
 # Planejamento Financeiro
 
-App de controle financeiro doméstico em React (arquivo único).
+App de controle financeiro doméstico — arquivo único `index.html` (React embutido, 100% offline-capable).
 
-## Funcionalidades
-- Dashboard com resumo financeiro
-- Gestão de contas e cartões de crédito
-- Transações com suporte a recorrência e parcelamento
-- Relatórios detalhados com saldo diário
-- Metas financeiras
-- Simulações
-- Exportação PDF
-- Autenticação com JWT
+**URL de produção:** https://maramelstrapasson-tech.github.io/planejamento-financeiro/
 
-## Deploy
-Hospedado em: https://planejafinanceiro.netlify.app
+**Política de Privacidade:** https://maramelstrapasson-tech.github.io/planejamento-financeiro/politica-de-privacidade.html
 
-## Tech
-- React 18 (production mode)
-- Chart.js para gráficos
-- jsPDF para exportação
-- Backend: Base44
+Backend: Base44 (functions/dados, cartao, auth, stripe) com JWT + isolamento por usuário.
