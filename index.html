@@ -5684,7 +5684,7 @@ function Simulacao({
     className: "w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm outline-none focus:border-blue-400"
   }), /*#__PURE__*/React.createElement("p", {
     className: "text-xs text-gray-400 mt-0.5"
-  }, "\uD83D\uDD04 Autom\u00E1tica: poupan\u00E7a paga ", cotacoes.selic && cotacoes.selic <= 8.5 ? "70% da Selic" : "0,5% a.m.", cotacoes.selic ? " (Selic " + cotacoes.selic.toFixed(2).replace('.', ',') + "% a.a.)" : "")), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("label", {
+  }, "\uD83D\uDD04 Autom\u00E1tica: poupan\u00E7a paga " + (cotacoes.selic && cotacoes.selic <= 8.5 ? "70% da Selic" : "0,5% a.m.") + (cotacoes.tr != null ? " + TR " + cotacoes.tr.toFixed(4).replace('.', ',') + "%" : "") + (cotacoes.tr != null && form.taxa ? " = " + Number(form.taxa).toFixed(2).replace('.', ',') + "% a.m. (Selic " + cotacoes.selic.toFixed(2).replace('.', ',') + "% a.a.)" : ""))), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("label", {
     className: "block text-xs font-medium text-gray-600 mb-1"
   }, "Valor inicial (R$)"), /*#__PURE__*/React.createElement("input", {
     name: "valor_inicial",
