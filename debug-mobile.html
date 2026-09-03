@@ -1,5 +1,32 @@
 <!DOCTYPE html>
 <html><head><meta charset="UTF-8"><title>Emulador Mobile</title></head>
 <body style="margin:0;background:#111;display:flex;justify-content:center;align-items:flex-start;padding:10px">
-<iframe src="https://maramelstrapasson-tech.github.io/planejamento-financeiro/?v=3" width="390" height="844" style="border:2px solid #444;background:#fff"></iframe>
+<script>
+(async function(){
+  try {
+    const r = await fetch('https://superagent-995f94be.base44.app/functions/auth', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'login',email:'teste.celular@app.com',senha:'teste123456'})});
+    const j = await r.json();
+    if(j.ok){ localStorage.setItem('cfd_token', j.token); localStorage.setItem('cfd_user', JSON.stringify(j.user)); }
+  } catch(e){}
+  const f = document.createElement('iframe');
+  f.width = 390; f.height = 844;
+  f.style.cssText = 'border:2px solid #444;background:#fff';
+  f.src = 'https://maramelstrapasson-tech.github.io/planejamento-financeiro/?v=4';
+  document.body.appendChild(f);
+  f.onload = function(){
+    const nav = (tries) => {
+      if(tries <= 0) return;
+      try {
+        const d = f.contentWindow.document;
+        const ok = [...d.querySelectorAll('button')].find(b => b.textContent.trim() === 'Entendi!');
+        if(ok) ok.click();
+        const btn = [...d.querySelectorAll('button')].find(b => b.textContent.includes('Transa'));
+        if(btn && !btn.className.includes('bg-blue-100')) btn.click();
+      } catch(e){}
+      setTimeout(() => nav(tries-1), 1500);
+    };
+    setTimeout(() => nav(12), 2500);
+  };
+})();
+</script>
 </body></html>
