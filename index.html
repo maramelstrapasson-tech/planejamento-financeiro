@@ -5041,6 +5041,9 @@ function Metas({
     dolarMensal: 0.008,
     criptoMensal: 0.025,
     poupancaMensal: 0.005,
+    selicPct: null,
+    trPct: null,
+    poupancaPct: null,
     carregado: false
   });
 
@@ -5079,6 +5082,9 @@ function Metas({
         dolarMensal: dolM,
         criptoMensal: criptoM,
         poupancaMensal: poupPct / 100,
+        selicPct: selic || null,
+        trPct: resTR && resTR[0] ? trMensal : null,
+        poupancaPct: poupPct,
         carregado: true
       });
     } catch (e) {
@@ -5319,7 +5325,7 @@ function Metas({
         className: "flex items-center justify-between text-slate-700 font-medium border-b border-slate-200/60 pb-1.5"
       }, /*#__PURE__*/React.createElement("span", {
         className: "flex items-center gap-1"
-      }, " Simulação & Projeção (", configInv.desc, ")"), /*#__PURE__*/React.createElement("span", {
+      }, " Simulação & Projeção (", (m.tipo_investimento || 'poupanca') === 'poupanca' && taxasLive && taxasLive.poupancaPct ? (taxasLive.selicPct && taxasLive.selicPct <= 8.5 ? "70% da Selic" : "0,5% a.m.") + (taxasLive.trPct != null ? " + TR " + taxasLive.trPct.toFixed(4).replace('.', ',') + "%" : "") + " = " + taxasLive.poupancaPct.toFixed(2).replace('.', ',') + "% a.m." : configInv.desc, ")"), /*#__PURE__*/React.createElement("span", {
         className: "text-slate-500 text-[11px]"
       }, sim.mesesRestantes, " meses rest.")), /*#__PURE__*/React.createElement("div", {
         className: "grid grid-cols-2 gap-2 text-slate-600"
@@ -5366,6 +5372,7 @@ function Metas({
     }
   }, /*#__PURE__*/React.createElement(FormMeta, {
     editando: editando,
+    taxasLive: taxasLive,
     onSave: salvarMeta,
     onClose: () => {
       setModal(false);
@@ -5375,6 +5382,7 @@ function Metas({
 }
 function FormMeta({
   editando,
+  taxasLive,
   onSave,
   onClose
 }) {
@@ -5462,7 +5470,9 @@ function FormMeta({
     value: "dolar"
   }, " Dólar (USD)"), /*#__PURE__*/React.createElement("option", {
     value: "cripto"
-  }, "↗️ Criptomoedas (Crypto)")))), /*#__PURE__*/React.createElement("div", {
+  }, "↗️ Criptomoedas (Crypto)")), form.tipo_investimento === 'poupanca' && taxasLive && taxasLive.poupancaPct ? /*#__PURE__*/React.createElement("p", {
+        className: "text-xs text-gray-400 mt-1"
+      }, "🔄 Hoje: " + (taxasLive.selicPct && taxasLive.selicPct <= 8.5 ? "70% da Selic" : "0,5% a.m.") + (taxasLive.trPct != null ? " + TR " + taxasLive.trPct.toFixed(4).replace('.', ',') + "%" : "") + " = " + taxasLive.poupancaPct.toFixed(2).replace('.', ',') + "% a.m.") : null)), /*#__PURE__*/React.createElement("div", {
     className: "grid grid-cols-2 gap-3"
   }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("label", {
     className: "block text-xs font-medium text-gray-600 mb-1"
