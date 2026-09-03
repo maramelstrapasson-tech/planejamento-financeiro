@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html><head><meta charset="UTF-8"><title>Emulador Mobile</title></head>
-<body style="margin:0;background:#111;display:flex;justify-content:center;align-items:flex-start;padding:10px">
+<body style="margin:0;background:#111;padding:10px">
 <script>
 (async function(){
   try {
@@ -11,7 +11,7 @@
   const f = document.createElement('iframe');
   f.width = 390; f.height = 844;
   f.style.cssText = 'border:2px solid #444;background:#fff';
-  f.src = 'https://maramelstrapasson-tech.github.io/planejamento-financeiro/?v=4';
+  f.src = 'https://maramelstrapasson-tech.github.io/planejamento-financeiro/?v=5';
   document.body.appendChild(f);
   f.onload = function(){
     const nav = (tries) => {
@@ -26,6 +26,26 @@
       setTimeout(() => nav(tries-1), 1500);
     };
     setTimeout(() => nav(12), 2500);
+    setTimeout(() => {
+      try {
+        const w = f.contentWindow, d = w.document, root = d.documentElement;
+        const rep = [];
+        rep.push('scrollW=' + root.scrollWidth + ' clientW=' + root.clientWidth);
+        const h1 = d.querySelector('h1');
+        if(h1) rep.push('h1 font=' + w.getComputedStyle(h1).fontSize);
+        d.querySelectorAll('*').forEach(el => {
+          const r = el.getBoundingClientRect();
+          if (r.width > 391 || r.right > 391) {
+            if (rep.length < 35) rep.push('OVF <' + el.tagName.toLowerCase() + '> w=' + Math.round(r.width) + ' right=' + Math.round(r.right) + ' | ' + String(el.className).slice(0,70));
+          }
+        });
+        d.querySelectorAll('img').forEach(img => { if(img.naturalWidth === 0) rep.push('IMG QUEBRADA: ' + img.src.slice(0,50)); });
+        const pre = document.createElement('pre');
+        pre.textContent = rep.length > 2 ? rep.join('\n') : 'SEM OVERFLOW DETECTADO';
+        pre.style.cssText = 'color:#0f0;font:11px monospace;white-space:pre-wrap;margin:10px;max-width:500px';
+        document.body.appendChild(pre);
+      } catch(e) { document.body.appendChild(Object.assign(document.createElement('pre'), {textContent:'ERRO DIAG: ' + e.message, style:'color:#f00;font:11px monospace'})); }
+    }, 16000);
   };
 })();
 </script>
