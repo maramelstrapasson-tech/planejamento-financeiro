@@ -3518,22 +3518,22 @@ function Transacoes({
     className: "flex items-center justify-between flex-wrap gap-3"
   }, /*#__PURE__*/React.createElement("h1", {
     className: "text-xl font-bold text-gray-800"
-  }, "Transa\xE7\xF5es"), /*#__PURE__*/React.createElement("div", {
-    className: "flex items-center gap-2"
-  }, /*#__PURE__*/React.createElement(MesNav, {
+  }, "Transa\xE7\xF5es"), /*#__PURE__*/React.createElement(MesNav, {
     anoMes: anoMes,
     onChange: setAnoMes
-  }), /*#__PURE__*/React.createElement("button", {
+  })), /*#__PURE__*/React.createElement("div", {
+    className: "flex items-center gap-2 w-full"
+  }, /*#__PURE__*/React.createElement("button", {
     onClick: () => {
       setModoSelecao(v => !v);
       setSelecionados(new Set());
     },
-    className: `px-3 py-2 rounded-xl text-sm font-medium transition-all ${modoSelecao ? 'bg-indigo-100 text-indigo-700 border border-indigo-300' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`
+    className: `flex-1 px-3 py-2.5 rounded-xl text-sm font-medium transition-all ${modoSelecao ? 'bg-indigo-100 text-indigo-700 border border-indigo-300' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`
   }, "\u2611 Selecionar"), /*#__PURE__*/React.createElement("div", {
-    className: "relative group"
+    className: "relative group flex-1"
   }, /*#__PURE__*/React.createElement("button", {
     onClick: () => setMenuNova(v => !v),
-    className: "bg-blue-600 text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-blue-700 flex items-center gap-1"
+    className: "bg-blue-600 text-white px-4 py-2.5 rounded-xl text-sm font-medium hover:bg-blue-700 flex items-center justify-center gap-1 flex-1 w-full"
   }, "+ Nova ", /*#__PURE__*/React.createElement("span", {
     className: "text-blue-200 text-xs"
   }, "\u25BE")), /*#__PURE__*/React.createElement("div", {
@@ -3566,7 +3566,7 @@ function Transacoes({
     className: "font-medium"
   }, "Nova Compra Parcelada"), /*#__PURE__*/React.createElement("p", {
     className: "text-xs text-gray-400"
-  }, "Divida uma compra em v\xE1rias vezes"))))))), modoSelecao && /*#__PURE__*/React.createElement("div", {
+  }, "Divida uma compra em v\xE1rias vezes")))))), modoSelecao && /*#__PURE__*/React.createElement("div", {
     className: "bg-indigo-50 border border-indigo-200 rounded-2xl p-3 flex flex-wrap items-center gap-2"
   }, /*#__PURE__*/React.createElement("label", {
     className: "flex items-center gap-2 cursor-pointer select-none"
@@ -6697,7 +6697,7 @@ function App() {
     className: `w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition-all ${page === n.id ? 'bg-blue-50 text-blue-700 font-semibold' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-800'}`
   }, /*#__PURE__*/React.createElement("span", {
     className: "text-base"
-  }, n.icon), n.label), /*#__PURE__*/React.createElement("button", {
+  }, n.icon), n.label)), /*#__PURE__*/React.createElement("button", {
     onClick: novaTransacao,
     className: "w-full flex items-center gap-3 px-3 py-2.5 mt-2 rounded-xl text-sm font-semibold text-white shadow-sm transition-all bg-blue-600 hover:bg-blue-700"
   }, /*#__PURE__*/React.createElement("span", {
@@ -6801,7 +6801,7 @@ function App() {
     className: `w-full flex items-center gap-3 px-3 py-3 rounded-xl text-sm transition-all ${page === n.id ? 'bg-blue-50 text-blue-700 font-semibold' : 'text-gray-600 hover:bg-gray-50'}`
   }, /*#__PURE__*/React.createElement("span", {
     className: "text-xl"
-  }, n.icon), n.label), /*#__PURE__*/React.createElement("button", {
+  }, n.icon), n.label)), /*#__PURE__*/React.createElement("button", {
     onClick: () => {
       novaTransacao();
       setDrawerOpen(false);
