@@ -1256,6 +1256,8 @@ function AuthScreen({
     setLoading(false);
   }
 
+  var FACEBOOK_APP_ID = '';
+  var INSTAGRAM_APP_ID = '';
   // Google OAuth via redirecionamento de pagina (sem popup - nao e bloqueado por navegadores)
   function loginGoogle() {
     setErro('');
@@ -1265,15 +1267,24 @@ function AuthScreen({
     const url = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientId}&redirect_uri=${redirect}&response_type=token&scope=${scope}`;
     window.location.href = url;
   }
-  async function loginApple() {
+  // IDs de app do Meta (Facebook/Instagram) — preenchidos quando a Mara criar os apps
+  function loginFacebook() {
     setErro('');
-    var APPLE_CLIENT_ID = '';
-    if (!APPLE_CLIENT_ID) {
-      setErro('Login com Apple: requer conta Apple Developer (US$ 99/ano) com um Services ID e o dominio do app registrados. Quando os dados estiverem prontos, o suporte ativa em minutos.');
+    if (!FACEBOOK_APP_ID) {
+      setErro('Login com Facebook: crie um app em developers.facebook.com (produto Facebook Login) e me envie o App ID — eu ativo em segundos.');
       return;
     }
-    var redirect = encodeURIComponent(AUTH_URL + '?action=apple_callback');
-    window.location.href = 'https://appleid.apple.com/auth/authorize?response_type=code&response_mode=form_post&client_id=' + APPLE_CLIENT_ID + '&redirect_uri=' + redirect + '&scope=name%20email';
+    var redirect = encodeURIComponent(window.location.origin + window.location.pathname);
+    window.location.href = 'https://www.facebook.com/v21.0/dialog/oauth?client_id=' + FACEBOOK_APP_ID + '&redirect_uri=' + redirect + '&response_type=token&scope=email,public_profile&state=facebook';
+  }
+  function loginInstagram() {
+    setErro('');
+    if (!INSTAGRAM_APP_ID) {
+      setErro('Login com Instagram: crie um app no Meta com o produto Instagram API with Instagram Login e me envie o App ID.');
+      return;
+    }
+    var redirect = encodeURIComponent(window.location.origin + window.location.pathname);
+    window.location.href = 'https://www.instagram.com/oauth/authorize?client_id=' + INSTAGRAM_APP_ID + '&redirect_uri=' + redirect + '&response_type=code&scope=instagram_business_basic&state=instagram';
   }
   return /*#__PURE__*/React.createElement("div", {
     className: "min-h-screen flex items-center justify-center p-4",
@@ -1391,15 +1402,24 @@ function AuthScreen({
     fill: "#EA4335",
     d: "M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
   })), "Entrar com Google")), /*#__PURE__*/React.createElement("button", {
-    onClick: loginApple,
-    className: "w-full mt-2 py-2.5 border-2 border-gray-200 rounded-xl text-sm font-medium text-gray-700 hover:bg-gray-50 flex items-center justify-center gap-2 transition-all"
+    onClick: loginFacebook,
+    className: "w-full mt-2 py-2.5 border-2 border-gray-200 rounded-xl text-sm font-medium text-gray-700 hover:bg-gray-50 flex items-center justify-center gap-2 transition-colors"
+  }, /*#__PURE__*/React.createElement("svg", {
+    className: "w-5 h-5",
+    viewBox: "0 0 24 24",
+    fill: "#1877F2"
+  }, /*#__PURE__*/React.createElement("path", {
+    d: "M24 12.07C24 5.4 18.63 0 12 0S0 5.4 0 12.07C0 18.1 4.39 23.1 10.13 24v-8.44H7.08v-3.49h3.05V9.41c0-3.02 1.79-4.7 4.53-4.7 1.31 0 2.68.24 2.68.24v2.97h-1.5c-1.5 0-1.96.93-1.96 1.89v2.26h3.32l-.53 3.49h-2.8V24C19.61 23.1 24 18.1 24 12.07z"
+  })), "Entrar com Facebook"), /*#__PURE__*/React.createElement("button", {
+    onClick: loginInstagram,
+    className: "w-full mt-2 py-2.5 border-2 border-gray-200 rounded-xl text-sm font-medium text-gray-700 hover:bg-gray-50 flex items-center justify-center gap-2 transition-colors"
   }, /*#__PURE__*/React.createElement("svg", {
     className: "w-5 h-5",
     viewBox: "0 0 24 24",
     fill: "currentColor"
   }, /*#__PURE__*/React.createElement("path", {
-    d: "M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.53 4.08zM12.03 7.25c-.15-2.23 1.66-4.25 3.74-4.25.29 2.58-2.05 4.5-3.74 4.25z"
-  })), "Continuar com Apple"), /*#__PURE__*/React.createElement("p", {
+    d: "M12 2.16c3.2 0 3.58.01 4.85.07 3.25.15 4.77 1.69 4.92 4.92.06 1.27.07 1.65.07 4.85s-.01 3.58-.07 4.85c-.15 3.23-1.66 4.77-4.92 4.92-1.27.06-1.64.07-4.85.07s-3.58-.01-4.85-.07c-3.26-.15-4.77-1.7-4.92-4.92-.06-1.27-.07-1.64-.07-4.85s.01-3.58.07-4.85c.15-3.23 1.66-4.77 4.92-4.92 1.27-.06 1.65-.07 4.85-.07zM12 0C8.74 0 8.33.01 7.05.07 2.7.27.27 2.69.07 7.05.01 8.33 0 8.74 0 12s.01 3.67.07 4.95c.2 4.36 2.62 6.78 6.98 6.98 1.28.06 1.69.07 4.95.07s3.67-.01 4.95-.07c4.35-.2 6.78-2.62 6.98-6.98.06-1.28.07-1.69.07-4.95s-.01-3.67-.07-4.95c-.2-4.35-2.62-6.78-6.98-6.98C15.67.01 15.26 0 12 0zm0 5.84A6.16 6.16 0 105.84 12 6.16 6.16 0 0012 5.84zm0 10.15A4 4 0 1112 8a4 4 0 010 8zm6.4-11.85a1.44 1.44 0 101.44 1.44 1.44 1.44 0 00-1.44-1.44z"
+  })), "Entrar com Instagram"), /*#__PURE__*/React.createElement("p", {
     className: "text-center text-blue-200 text-xs mt-4"
   }, "\uD83D\uDD12 Dados protegidos com criptografia")));
 }
@@ -6485,6 +6505,59 @@ function App() {
   const [anoMes, setAnoMes] = useState(currentYM());
   const [assina, setAssina] = useState(null);
   useEffect(() => {
+    // Retorno do login Facebook (hash com access_token + state=facebook)
+    if (window.location.hash && window.location.hash.indexOf('access_token=') > -1 && window.location.hash.indexOf('state=facebook') > -1) {
+      const fp = new URLSearchParams(window.location.hash.slice(1));
+      const f_token = fp.get('access_token');
+      history.replaceState(null, '', window.location.pathname);
+      if (f_token) {
+        fetch('https://graph.facebook.com/me?fields=id,name,email&access_token=' + encodeURIComponent(f_token))
+          .then(r => r.json()).then(async info => {
+            if (info && info.id) {
+              const res = await callAuth({
+                action: 'facebook_login',
+                email: info.email || (info.id + '@facebook.user'),
+                nome: info.name,
+                facebook_id: info.id
+              });
+              if (res.ok) {
+                localStorage.setItem('cfd_token', res.token);
+                localStorage.setItem('cfd_user', JSON.stringify(res.user));
+                setUser(res.user);
+                setToken(res.token);
+              } else if (res.error) {
+                alert('Login Facebook: ' + res.error);
+              }
+            }
+            setChecking(false);
+          }).catch(() => setChecking(false));
+        return;
+      }
+    }
+    // Retorno do login Instagram (?code=...&state=instagram)
+    if (window.location.search && window.location.search.indexOf('state=instagram') > -1 && window.location.search.indexOf('code=') > -1) {
+      const iq = new URLSearchParams(window.location.search);
+      const ig_code = iq.get('code');
+      history.replaceState(null, '', window.location.pathname);
+      if (ig_code) {
+        callAuth({
+          action: 'instagram_login',
+          code: ig_code,
+          redirect_uri: window.location.origin + window.location.pathname
+        }).then(async res => {
+          if (res.ok) {
+            localStorage.setItem('cfd_token', res.token);
+            localStorage.setItem('cfd_user', JSON.stringify(res.user));
+            setUser(res.user);
+            setToken(res.token);
+          } else if (res.error) {
+            alert('Login Instagram: ' + res.error);
+          }
+          setChecking(false);
+        }).catch(() => setChecking(false));
+        return;
+      }
+    }
     // Retorno do login Google: o access_token chega no hash da URL apos o redirect
     if (window.location.hash && window.location.hash.indexOf('access_token=') > -1) {
       const gp = new URLSearchParams(window.location.hash.slice(1));
