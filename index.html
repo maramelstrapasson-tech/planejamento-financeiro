@@ -6377,9 +6377,9 @@ function BannerAssinatura({ assina, token }) {
   const dtFim = assina.trial_fim ? assina.trial_fim.split('-').reverse().join('/') : '';
   if (assina.status === 'ativa') {
     return /*#__PURE__*/React.createElement("div", {
-      className: "mb-3 rounded-xl bg-green-100 text-green-700 px-4 py-2.5 flex items-center justify-between gap-3 text-sm"
+      className: "mb-3 rounded-xl bg-green-100 text-green-700 px-4 py-2.5 flex flex-wrap items-center justify-between gap-x-3 gap-y-1 text-sm"
     }, /*#__PURE__*/React.createElement("span", {
-      className: "font-medium"
+      className: "font-medium flex-1 min-w-0 break-words"
     }, "\u2705 Assinatura ", assina.plano === 'anual' ? 'anual' : 'mensal', " ativa \u2014 obrigado por apoiar o app!"), /*#__PURE__*/React.createElement("button", {
       onClick: gerenciar,
       disabled: carregando,
@@ -6390,9 +6390,9 @@ function BannerAssinatura({ assina, token }) {
     const dias = assina.dias_restantes;
     const alerta = dias <= 3;
     return /*#__PURE__*/React.createElement("div", {
-      className: `mb-3 rounded-xl px-4 py-2.5 flex items-center justify-between gap-3 text-sm ${alerta ? 'bg-yellow-100 text-yellow-800' : 'bg-blue-100 text-blue-700'}`
+      className: `mb-3 rounded-xl px-4 py-2.5 flex flex-wrap items-center justify-between gap-x-3 gap-y-1 text-sm ${alerta ? 'bg-yellow-100 text-yellow-800' : 'bg-blue-100 text-blue-700'}`
     }, /*#__PURE__*/React.createElement("span", {
-      className: "font-medium"
+      className: "font-medium flex-1 min-w-0 break-words"
     }, alerta ? `\u26A0\uFE0F Aten\u00e7\u00e3o: seu per\u00edodo gr\u00e1tis acaba ${dias === 0 ? 'hoje' : 'em ' + dias + (dias === 1 ? ' dia' : ' dias')}! A partir de ${dtFim} a assinatura ser\u00e1 cobrada: R$ 12/m\u00eas ou R$ 108/ano.` : `\uD83C\uDF89 Per\u00edodo gr\u00e1tis at\u00e9 ${dtFim} (${dias} dias restantes). Depois: R$ 12/m\u00eas ou R$ 108/ano \u2014 cancele quando quiser.`), /*#__PURE__*/React.createElement("button", {
       onClick: () => assinar('anual'),
       disabled: carregando,
