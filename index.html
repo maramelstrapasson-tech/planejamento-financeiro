@@ -752,6 +752,9 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
     * { -webkit-tap-highlight-color: transparent; }
     [class*="overflow-y-auto"], [class*="overflow-auto"], nav, main { overscroll-behavior: contain; }
     body { touch-action: pan-y pinch-zoom; -webkit-overflow-scrolling: touch; }
+    @media (max-width: 767px) {
+      input:not([type="checkbox"]):not([type="radio"]):not([type="range"]), select, textarea { font-size: 16px !important; }
+    }
     /* Prevenir seleção de texto acidental */
     .no-select { -webkit-user-select: none; user-select: none; }
     .animate-spin { animation: spin 1s linear infinite; }
@@ -1282,8 +1285,12 @@ function AuthScreen({
   }, /*#__PURE__*/React.createElement("div", {
     className: "text-center mb-8"
   }, /*#__PURE__*/React.createElement("div", {
-    className: "w-16 h-16 bg-white rounded-2xl flex items-center justify-center text-3xl mx-auto mb-3 shadow-xl"
-  }, "\uD83D\uDCCA"), /*#__PURE__*/React.createElement("h1", {
+    className: "w-16 h-16 bg-white rounded-2xl flex items-center justify-center mx-auto mb-3 shadow-xl overflow-hidden"
+  }, /*#__PURE__*/React.createElement("img", {
+    src: APP_LOGO_B64,
+    alt: "Klippio",
+    className: "w-12 h-12 rounded-xl"
+  })), /*#__PURE__*/React.createElement("h1", {
     className: "text-2xl font-bold text-white"
   }, APP_NAME), /*#__PURE__*/React.createElement("p", {
     className: "text-blue-200 text-sm mt-1"
@@ -6772,9 +6779,11 @@ function App() {
     y1: "18",
     x2: "21",
     y2: "18"
-  }))), /*#__PURE__*/React.createElement("span", {
-    className: "font-bold text-white text-sm"
-  }, "PF")), /*#__PURE__*/React.createElement("div", {
+  }))), /*#__PURE__*/React.createElement("img", {
+    src: APP_LOGO_B64,
+    alt: "Klippio",
+    className: "w-7 h-7 rounded-lg shadow"
+  })), /*#__PURE__*/React.createElement("div", {
     className: "flex items-center gap-2"
   }, /*#__PURE__*/React.createElement("span", {
     className: "text-white text-xs opacity-70"
