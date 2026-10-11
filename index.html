@@ -4772,11 +4772,19 @@ function Parcelamentos({
     } else if (!isRec && !isFinished && p.status === 'Ativo' && (p.numero_parcelas || 0) > pagas && p.data_inicio) {
       const di = String(p.data_inicio).split('-').map(Number);
       if (di.length === 3 && di[0] > 0) {
+        const diaVencP = conta?.tipo === 'Cartão de Crédito' ? parseInt(conta.dia_vencimento) || 0 : 0;
         let yF = di[0];
-        let mF = di[1] + (p.numero_parcelas - 1);
+        let mBase = di[1];
+        let dF = di[2];
+        if (diaVencP >= 1 && diaVencP <= 31) {
+          if (dF > diaVencP) mBase++;
+          dF = diaVencP;
+        }
+        let mF = mBase + (p.numero_parcelas - 1);
         yF += Math.floor((mF - 1) / 12);
         mF = ((mF - 1) % 12) + 1;
-        finalizaLabel = `Finaliza em ${String(di[2]).padStart(2, '0')}/${String(mF).padStart(2, '0')}/${yF}`;
+        dF = Math.min(dF, new Date(yF, mF, 0).getDate());
+        finalizaLabel = `Finaliza em ${String(dF).padStart(2, '0')}/${String(mF).padStart(2, '0')}/${yF}`;
       }
     }
     const cor = isRec ? {
