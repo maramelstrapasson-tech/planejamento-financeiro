@@ -1261,7 +1261,7 @@ function AuthScreen({
   // Google OAuth via redirecionamento de pagina (sem popup - nao e bloqueado por navegadores)
   function loginGoogle() {
     setErro('');
-    const clientId = '1037198947358-hkgrihq5kv1h7fj3t8p6699kruo6guli.apps.googleusercontent.com';
+    const clientId = '1037198947358-688k3scjbn55jiehd4416drmirrgc90m.apps.googleusercontent.com';
     const redirect = encodeURIComponent(window.location.origin);
     const scope = encodeURIComponent('openid email profile');
     const url = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientId}&redirect_uri=${redirect}&response_type=token&scope=${scope}`;
